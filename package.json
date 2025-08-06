@@ -1,0 +1,23 @@
+{
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hellomynameis-cell/production_manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hellomynameis-cell/production_manager/issues"
+  },
+  "homepage": "https://github.com/hellomynameis-cell/production_manager#readme",
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
