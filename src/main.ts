@@ -1,5 +1,5 @@
 // --- IMPORTS ---
-import Sortable from 'sortablejs'; // Import Sortable.js for drag-and-drop functionality
+/// <reference types="sortablejs" />
 import { Order, Machine } from './interfaces.js';
 
 import {

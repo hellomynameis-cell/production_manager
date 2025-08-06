@@ -16,7 +16,7 @@ const machinesGridContainer = document.getElementById('machines-grid'); // Paren
 // --- HELPER FUNCTIONS ---
 async function loadMachineData() {
     try {
-        const response = await fetch('./machines.json');
+        const response = await fetch('machines.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

@@ -143,3 +143,4 @@ export function reorderOrdersByIndex(oldIndex, newIndex) {
     saveOrdersToLocalStorage();
     return true;
 }
+loadOrdersFromLocalStorage();
