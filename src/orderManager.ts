@@ -176,3 +176,5 @@ export function reorderOrdersByIndex(oldIndex: number, newIndex: number): boolea
     saveOrdersToLocalStorage();
     return true;
 }
+
+loadOrdersFromLocalStorage();
