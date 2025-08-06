@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Wird ausgeführt, wenn Sie Code in den "main"-Branch pushen
+  push:
+    branches: [ "main" ]
+  # Erlaubt Ihnen, diesen Workflow manuell auf GitHub zu starten
+  workflow_dispatch:
+
+# Stellt sicher, dass immer nur ein Deployment gleichzeitig läuft
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    # Diese Berechtigungen sind für das Deployment notwendig
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+      # Schritt 1: Das Repository auschecken
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Schritt 2: Node.js einrichten (für npm und tsc)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Schritt 3: Alle Abhängigkeiten installieren
+      - name: Install dependencies
+        run: npm install
+
+      # Schritt 4: Das Projekt bauen (TypeScript zu JavaScript kompilieren)
+      - name: Build project
+        run: npm run build
+
+      # Schritt 5: GitHub Pages für das Deployment vorbereiten
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Schritt 6: Die gebauten Dateien hochladen
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Dieser Pfad muss auf den Ordner zeigen, der Ihre index.html enthält.
+          # Da Ihre index.html im Hauptverzeichnis liegt, ist '.' korrekt.
+          path: '.' 
+
+      # Schritt 7: Das Deployment auf GitHub Pages durchführen
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
