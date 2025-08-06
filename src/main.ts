@@ -1,5 +1,4 @@
 // --- IMPORTS ---
-/// <reference types="sortablejs" />
 import { Order, Machine } from './interfaces.js';
 
 import {
