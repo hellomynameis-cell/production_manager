@@ -32,7 +32,7 @@ const machinesGridContainer = document.getElementById('machines-grid') as HTMLEl
 
 async function loadMachineData(): Promise<Machine[]> {
     try {
-        const response = await fetch('./machines.json');
+        const response = await fetch('machines.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
