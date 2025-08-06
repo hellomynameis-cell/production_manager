@@ -1,0 +1,212 @@
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #007bff;
+    --danger-color: #dc3545;
+    --bg-body: #f4f7f6;
+    --bg-card: #ffffff;
+    --bg-alt: #e9ecef;
+    --border-color: #dee2e6;
+    --text-dark: #343a40;
+    --text-light: #6c757d;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.07); /* REDUCED shadow */
+}
+
+/* --- GENERAL LAYOUT & BODY --- */
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 15px; /* REDUCED base font size for overall compactness */
+    margin: 0;
+    background-color: var(--bg-body);
+    color: var(--text-dark);
+}
+
+.app-container {
+    padding: 15px; /* REDUCED outer padding */
+}
+
+header h2, .machines-area h2 {
+    margin-top: 0;
+    font-size: 1.5em; /* REDUCED heading size */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 1.5rem; /* REDUCED margin */
+}
+
+.main-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* REDUCED gap between columns */
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* --- LEFT COLUMN: Order Forms & List --- */
+.order-list-area {
+    flex: 1 1 320px; /* REDUCED base width */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* REDUCED gap */
+    max-width: 300px;
+}
+
+/* GOAL: Make "Add new order" section smaller */
+.add-order-section {
+    background-color: var(--bg-card);
+    padding: 1rem; /* REDUCED padding */
+    border-radius: 6px; /* REDUCED border radius */
+    box-shadow: var(--shadow);
+}
+.add-order-section h2 { font-size: 1.2em; margin-bottom: 1rem; }
+#add-order-form label { display: block; margin-bottom: 0.25rem; font-weight: 500; font-size: 0.9em; }
+#add-order-form input, #add-order-form select {
+    width: 100%;
+    padding: 0.5rem 0.6rem; /* REDUCED padding */
+    margin-bottom: 0.75rem; /* REDUCED margin */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+#add-order-form button {
+    width: 100%;
+    padding: 0.6rem; /* REDUCED padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    margin-top: 0.25rem;
+}
+#submitOrderButton { background-color: var(--primary-color); }
+#resetFormButton { background-color: var(--text-light); }
+
+/* Styling for the sort controls section */
+.sort-section {
+    background-color: var(--bg-card);
+    padding: 0.75rem 1rem; /* REDUCED padding */
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.sort-section select {
+    flex-grow: 1;
+    padding: 0.5rem; /* REDUCED padding */
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+/* Styling for the main vertical order list */
+#orders-container {
+    background-color: var(--bg-card);
+    padding: 1rem; /* REDUCED padding */
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* REDUCED gap */
+}
+
+
+/* --- RIGHT COLUMN: Machines --- */
+.machines-area {
+    flex: 3 1 600px;
+}
+
+#machines-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* REDUCED Vertical gap between each machine */
+}
+
+.machine-container {
+    display: flex;
+    align-items: stretch;
+    background-color: var(--bg-card);
+    padding: 0.75rem; /* REDUCED padding */
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+}
+
+.machine-container h3 {
+    flex: 0 0 100px; /* REDUCED fixed width for the name */
+    margin: 0;
+    font-size: 1em; /* REDUCED font size */
+    text-align: right;
+    padding-right: 10px; /* REDUCED padding */
+    border-right: 1px solid var(--bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.machine-orders {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* REDUCED Horizontal gap between orders */
+    min-height: 60px; /* REDUCED min height */
+    border: 1px dashed var(--border-color);
+    border-radius: 5px;
+    padding: 8px; /* REDUCED padding */
+    overflow-x: auto;
+}
+
+/* --- SHARED STYLING for .order-item --- */
+.order-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* REDUCED gap */
+    padding: 0.5rem; /* REDUCED padding */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--bg-body);
+}
+.order-item h4 { font-size: 0.9em; margin: 0; font-weight: 600; }
+.order-item p { font-size: 0.8em; margin: 0; color: var(--text-light); }
+.order-item .order-actions { display: flex; gap: 5px; margin-top: 5px; align-self: flex-end; }
+
+/* Status badges */
+.order-item strong[class*="status-"] {
+    font-weight: bold;
+    padding: 2px 6px; /* REDUCED padding */
+    font-size: 0.75em; /* REDUCED font size */
+    border-radius: 4px;
+}
+.status-Pending { background-color: #ffc107; color: #333; }
+.status-Shipped { background-color: #17a2b8; color: white; }
+.status-Delivered { background-color: #28a745; color: white; }
+
+/* Buttons inside order items */
+.order-item button {
+    padding: 3px 7px; /* REDUCED padding */
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8em; /* REDUCED font size */
+}
+.edit-button { background-color: var(--secondary-color); }
+.delete-button { background-color: var(--danger-color); }
+
+/* Style orders specifically when inside a machine's horizontal list */
+.machine-orders .order-item {
+    flex-shrink: 0;
+    width: 160px; /* REDUCED fixed width */
+    background-color: white;
+}
+
+/* --- Sortable.js Helper Class --- */
+.sortable-ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+/* --- Responsive Media Query --- */
+@media (max-width: 992px) {
+    .main-content {
+        flex-direction: column;
+    }
+}

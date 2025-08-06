@@ -1,0 +1,9 @@
+[
+    { "id": "machine-1", "name": "CNC Mill 1" },
+    { "id": "machine-2", "name": "CNC Mill 2" },
+    { "id": "machine-3", "name": "Laser Cutter A" },
+    { "id": "machine-4", "name": "Laser Cutter B" },
+    { "id": "press-a", "name": "Assembly Press A" },
+    { "id": "press-b", "name": "Assembly Press B" },
+    { "id": "finishing-1", "name": "Finishing Station 1" }
+]
