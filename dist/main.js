@@ -1,3 +1,4 @@
+// --- IMPORTS ---
 import { getAllOrders, getSortedOrders, addOrder, deleteOrder, updateOrder, updateOrderLocationAndPosition } from './orderManager.js';
 // --- CONFIGURATION ---
 let machineList = []; // This will hold our machine data once loaded
