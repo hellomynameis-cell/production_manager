@@ -2,6 +2,7 @@
 
 declare const Sortable: any;
 
+
 import { Order, Machine } from './interfaces.js';
 
 import {
@@ -225,7 +226,7 @@ function resetForm(): void {
 /**
  * This single function handles the end of any drag-and-drop operation from any list.
  */
-function handleDragEnd(evt: Sortable.SortableEvent): void {
+function handleDragEnd(evt: any): void {
     const draggedItem = evt.item; // The HTML element that was dragged
     const targetList = evt.to;   // The HTML element of the list where it was dropped
 
