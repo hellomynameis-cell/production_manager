@@ -4,7 +4,7 @@ export interface Order {
     productName: string;
     quantity: number;
     status: 'Pending' | 'Shipped' | 'Delivered';
-    location: 'main-list' | 'machine-A' | 'machine-B' | 'machine-C'; // Define possible locations
+    location: string; // <--- DIE LÖSUNG
 }
 
 export interface Machine {

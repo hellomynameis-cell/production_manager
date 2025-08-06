@@ -2,7 +2,8 @@
   "name": "typescript",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",  "scripts": {
+  "main": "script.js",
+  "scripts": {
     "build": "tsc"
   },
   "repository": {
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/hellomynameis-cell/production_manager#readme",
   "devDependencies": {
+    "@types/sortablejs": "^1.15.8",
     "typescript": "^5.9.2"
   }
 }
