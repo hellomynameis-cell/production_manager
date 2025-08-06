@@ -1,4 +1,7 @@
 // --- IMPORTS ---
+
+import Sortable from 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/modular/sortable.esm.js';
+
 import { Order, Machine } from './interfaces.js';
 
 import {
