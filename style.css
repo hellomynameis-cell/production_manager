@@ -210,3 +210,65 @@ header {
         flex-direction: column;
     }
 }
+
+
+
+
+/* =============================================== */
+/* === Toast Notification Styles (NEW) === */
+/* =============================================== */
+
+/* The container that holds all the toasts */
+#toast-container {
+    position: fixed;         /* Stays on the screen even when you scroll */
+    top: 20px;               /* 20px from the top */
+    right: 20px;              /* 20px from the right */
+    z-index: 1000;           /* Sits on top of all other content */
+    display: flex;           /* Use flexbox to manage toasts */
+    flex-direction: column;  /* Stack toasts vertically */
+    gap: 10px;               /* Space between each toast */
+}
+
+/* The style for a single toast message */
+.toast {
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0; /* Start invisible */
+    animation: fadeIn 0.5s forwards, fadeOut 0.5s 2.5s forwards; /* Appear, wait 2.5s, then disappear */
+}
+
+/* Modifier class for a SUCCESS toast */
+.toast--success {
+    background-color: #28a745; /* Green */
+}
+
+/* Modifier class for an ERROR toast */
+.toast--error {
+    background-color: #dc3545; /* Red */
+}
+
+
+/* Animation keyframes for appearing and disappearing */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px); /* Slide in from above */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

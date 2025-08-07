@@ -34,6 +34,37 @@ const machinesGridContainer = document.getElementById('machines-grid') as HTMLEl
 
 // --- HELPER FUNCTIONS ---
 
+function showToast(message: string, type: 'success' | 'error' = 'success'): void {
+    const toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        // If the container doesn't exist, do nothing.
+        console.error('Toast container not found!');
+        return;
+    }
+
+    // 1. Create a new div element for the toast
+    const toastElement = document.createElement('div');
+
+    // 2. Add the necessary CSS classes
+    toastElement.className = `toast toast--${type}`;
+
+    // 3. Set the message text
+    toastElement.textContent = message;
+
+    // 4. Add the new toast to the container
+    toastContainer.appendChild(toastElement);
+
+    // 5. Set a timer to remove the toast after it has faded out
+    // The total duration is 3000ms (3s) based on our CSS animation
+    setTimeout(() => {
+        toastElement.remove();
+    }, 3000);
+}
+
+
+
+
+
 async function loadMachineData(): Promise<Machine[]> {
     try {
         const response = await fetch('machines.json');
@@ -163,7 +194,7 @@ function handleFormSubmit(event: Event): void {
     const status = statusSelect.value as 'Pending' | 'Shipped' | 'Delivered';
 
     if (!productName || isNaN(quantity) || quantity <= 0) {
-        alert('Please enter a valid product name and a quantity greater than 0.');
+        showToast('Please enter a valid product name and quantity.', 'error');
         return;
     }
 
@@ -178,9 +209,14 @@ function handleFormSubmit(event: Event): void {
             status,
             // Location is preserved by orderManager's updateOrder, so no need to pass it here.
         } as Order); // Cast to Order because the location property will be added by orderManager.
+        
+        showToast('Order updated successfully!', 'success');
+
     } else {
         // --- ADD MODE ---
         addOrder({ productName, quantity, status });
+        showToast('New order added!', 'success');
+
     }
 
     resetForm();
