@@ -1,9 +1,11 @@
 [
-    { "id": "machine-1", "name": "CNC Mill 1" },
-    { "id": "machine-2", "name": "CNC Mill 2" },
-    { "id": "machine-3", "name": "Laser Cutter A" },
-    { "id": "machine-4", "name": "Laser Cutter B" },
-    { "id": "press-a", "name": "Assembly Press A" },
-    { "id": "press-b", "name": "Assembly Press B" },
-    { "id": "finishing-1", "name": "Finishing Station 1" }
+    { "id": "machine-1", "name": "Maschine 34" },
+    { "id": "machine-2", "name": "Maschine 35" },
+    { "id": "machine-3", "name": "Maschine 36" },
+    { "id": "machine-4", "name": "KSP 3" },
+    { "id": "press-a", "name": "KSP 2" },
+    { "id": "press-b", "name": "KSP 1" },
+    { "id": "finishing-1", "name": "Beutler" },
+    { "id": "finishing-2", "name": "Steinel" }
+  
 ]
