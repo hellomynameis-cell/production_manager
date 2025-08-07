@@ -160,6 +160,7 @@ function handleFormSubmit(event) {
         return;
     }
     const orderIdToEdit = orderIdToEditInput.value;
+    let message = ''; // Define a variable to hold our success message
     if (orderIdToEdit) {
         // --- UPDATE MODE ---
         updateOrder({
@@ -169,15 +170,18 @@ function handleFormSubmit(event) {
             status,
             // Location is preserved by orderManager's updateOrder, so no need to pass it here.
         }); // Cast to Order because the location property will be added by orderManager.
-        showToast('Order updated successfully!', 'success');
+        message = 'Order updated successfully!'; // Set the update message
     }
     else {
         // --- ADD MODE ---
         addOrder({ productName, quantity, status });
-        showToast('New order added!', 'success');
+        message = 'New order added!'; // Set the add message
     }
     resetForm();
     renderOrders(); // Re-render the lists to show the changes.
+    setTimeout(() => {
+        showToast(message, 'success');
+    }, 0);
 }
 /**
  * Populates the form with an order's data for editing.
