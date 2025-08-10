@@ -2,7 +2,7 @@
 
 import { Order } from './interfaces.js';
 // Import from our new, safe config file
-import { GIST_ID, GITHUB_PAT, FILENAME } from './config.js';
+import { GIST_ID, SECRET_PAT, FILENAME } from './config.js';
 
 // The rest of this file is now IDENTICAL to your original working version,
 // but without the secret variables defined inside it.
@@ -12,7 +12,7 @@ export async function saveState(orders: Order[]): Promise<void> {
         await fetch(`https://api.github.com/gists/${GIST_ID}`, {
             method: 'PATCH',
             headers: {
-                'Authorization': `token ${GITHUB_PAT}`,
+                'Authorization': `token ${SECRET_PAT}`,
                 'Accept': 'application/vnd.github.v3+json'
             },
             body: JSON.stringify({
