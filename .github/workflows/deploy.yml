@@ -42,11 +42,12 @@ jobs:
         run: npm install
 
       - name: Create secrets file
-        shell: bash # Explicitly set the shell for consistency
+        shell: bash
         run: |
-          # Use printf for robust handling of special characters
-          printf "export const GIST_ID = '%s';\n" "${{ secrets.GIST_ID }}" > src/secrets.ts
-          printf "export const SECRET_PAT = '%s';\n" "${{ secrets.SECRET_PAT }}" >> src/secrets.ts
+          cat <<EOF > src/secrets.ts
+          export const GIST_ID = "${{ secrets.GIST_ID }}";
+          export const SECRET_PAT = "${{ secrets.SECRET_PAT }}";
+          EOF
 
       # Schritt 4: Das Projekt bauen (TypeScript zu JavaScript kompilieren)
       - name: Build project
