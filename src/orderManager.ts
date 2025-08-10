@@ -1,47 +1,27 @@
 import { Order } from './interfaces'; // Import the Order interface
+import { saveState, loadState } from './gistSync.js';
 
-const LOCAL_STORAGE_KEY = 'myOrders'; // A constant for clarity
+
 
 let orders: Order[] = []; // Initialize as empty, as it will be loaded from storage
 
 
 
-function loadOrdersFromLocalStorage(): void {
-    const storedOrders = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storedOrders) {
-        try {
-            orders = JSON.parse(storedOrders) as Order[];
-            // Data sanitization: ensure types are correct and location exists
-            orders.forEach(order => {
-                order.id = parseInt(order.id as any); // Ensure ID is a number
-                order.quantity = parseInt(order.quantity as any); // Ensure quantity is a number
-                if (!order.location) {
-                    order.location = 'main-list'; // Assign default location if missing
-                }
-            });
-        } catch (error) {
-            console.error("Error parsing stored orders from localStorage:", error);
-            orders = []; // Reset on error
+export async function initializeManager(): Promise<void> {
+    // Load the state from our Gist instead of localStorage
+    orders = await loadState();
+
+    // We keep your excellent data sanitization logic! This is very important.
+    orders.forEach(order => {
+        order.id = parseInt(order.id as any);
+        order.quantity = parseInt(order.quantity as any);
+        if (!order.location) {
+            order.location = 'main-list';
         }
-    } else {
-        console.log("No orders found in localStorage. Using default sample data.");
-        orders = [
-            { id: 1, productName: 'Laptop', quantity: 1, status: 'Pending', location: 'main-list' },
-            { id: 2, productName: 'Mouse', quantity: 2, status: 'Shipped', location: 'main-list' },
-            { id: 3, productName: 'Keyboard', quantity: 1, status: 'Delivered', location: 'main-list' },
-            { id: 4, productName: 'Monitor', quantity: 1, status: 'Pending', location: 'main-list' },
-        ];
-    }
+    });
+    console.log("Orders loaded from Gist.");
 }
 
-
-function saveOrdersToLocalStorage(): void {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(orders));
-    console.log("Orders saved to localStorage.");
-}
-
-// --- Initial load when the module is first imported ---
-loadOrdersFromLocalStorage();
 
 
 
@@ -88,93 +68,77 @@ export function getSortedOrders(sortBy: string): Order[] {
     return [...mainListOrders, ...machineOrders];
 }
 
-export function addOrder(newOrderData: Omit<Order, 'id' | 'location'>): Order {
+export async function addOrder(newOrderData: Omit<Order, 'id' | 'location'>): Promise<Order> {
     const newId = orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1;
     const newOrder: Order = {
         id: newId,
-        location: 'main-list', // New orders always start in the main list
+        location: 'main-list',
         ...newOrderData,
     };
     orders.push(newOrder);
-    saveOrdersToLocalStorage();
+    // CHANGE: Save to Gist instead of localStorage
+    await saveState(orders);
     return newOrder;
 }
 
-export function deleteOrder(orderIdToDelete: number): boolean {
+export async function deleteOrder(orderIdToDelete: number): Promise<boolean> {
     const initialLength = orders.length;
     orders = orders.filter(order => order.id !== orderIdToDelete);
     const wasDeleted = orders.length < initialLength;
     if (wasDeleted) {
-        saveOrdersToLocalStorage();
+        // CHANGE: Save to Gist instead of localStorage
+        await saveState(orders);
     }
     return wasDeleted;
 }
 
-export function updateOrder(updatedOrder: Order): boolean {
+export async function updateOrder(updatedOrder: Order): Promise<boolean> {
     const index = orders.findIndex(order => order.id === updatedOrder.id);
     if (index !== -1) {
-        // *** IMPORTANT FIX ***
-        // Preserve the original location property from the existing order.
-        // This prevents the form submission from accidentally erasing the location.
         const existingOrder = orders[index];
         orders[index] = {
-            ...updatedOrder, // Takes all properties from the form (id, name, qty, status)
-            location: existingOrder.location, // Explicitly keeps the old location
+            ...updatedOrder,
+            location: existingOrder.location,
         };
-        saveOrdersToLocalStorage();
+        // CHANGE: Save to Gist instead of localStorage
+        await saveState(orders);
         return true;
     }
     return false;
 }
 
 
-export function updateOrderLocationAndPosition(
+export async function updateOrderLocationAndPosition(
     draggedOrderId: number,
     newLocation: string,
     newOrderIdsInList: number[]
-): void {
-    // 1. Find the order that was dragged in our main `orders` array.
+): Promise<void> {
+    // Your complex sorting logic here remains EXACTLY the same.
     const draggedOrder = orders.find(o => o.id === draggedOrderId);
-    if (!draggedOrder) {
-        console.error(`Could not find dragged order with ID: ${draggedOrderId}`);
-        return;
-    }
-
-    // 2. Update its location property. This is crucial for persistence.
+    if (!draggedOrder) return;
     draggedOrder.location = newLocation;
-
-    // 3. Re-sort the master `orders` array to match the visual order of the affected list.
-    // This is the most complex part. We create a lookup map for efficiency.
     const orderMap = new Map(orders.map(order => [order.id, order]));
-
-    // We start with the known new order of the list that was just changed.
     const reorderedList = newOrderIdsInList.map(id => orderMap.get(id)!);
-
-    // Then, we gather all other orders that were NOT in that list.
     const otherOrders = orders.filter(order => !newOrderIdsInList.includes(order.id));
-
-    // Finally, we combine them. The reordered list comes first to preserve its new sequence,
-    // followed by all other untouched orders.
-    // NOTE: This strategy assumes that reordering only happens within one list at a time,
-    // which is how Sortable.js events work.
     orders = [...reorderedList, ...otherOrders];
-
-    // 4. Save the fully updated and reordered array to localStorage.
-    saveOrdersToLocalStorage();
+    
+    // CHANGE: Save to Gist instead of localStorage
+    await saveState(orders);
 }
 
 
 
 
 
-export function reorderOrdersByIndex(oldIndex: number, newIndex: number): boolean {
+export async function reorderOrdersByIndex(oldIndex: number, newIndex: number): Promise<boolean> {
     if (oldIndex < 0 || oldIndex >= orders.length || newIndex < 0 || newIndex >= orders.length) {
         return false;
     }
     const [movedItem] = orders.splice(oldIndex, 1);
     orders.splice(newIndex, 0, movedItem);
-    saveOrdersToLocalStorage();
+    
+    // CHANGE: Save to Gist instead of localStorage
+    await saveState(orders);
     return true;
 }
 
-loadOrdersFromLocalStorage();

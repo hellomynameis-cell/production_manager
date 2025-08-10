@@ -4,6 +4,8 @@ declare const Sortable: any;
 
 
 import { Order, Machine } from './interfaces.js';
+import { initializeManager } from './orderManager.js';
+
 
 import {
     getAllOrders,
@@ -308,6 +310,8 @@ async function initializeApp(): Promise<void> {
 
     // 2. Build the machine UI based on the loaded data
     setupMachinesUI();
+
+    await initializeManager(); 
 
     // 3. Attach event listeners
     addOrderForm.addEventListener('submit', handleFormSubmit);
