@@ -44,10 +44,11 @@ jobs:
       - name: Create secrets file
         shell: bash
         run: |
-          cat <<EOF > src/secrets.ts
-          export const GIST_ID = "${{ secrets.GIST_ID }}";
-          export const SECRET_PAT = "${{ secrets.SECRET_PAT }}";
-          EOF
+          # Use printf to ensure no extra newlines are added inside the strings.
+          # The "%s" is replaced by the secret, and nothing else.
+          printf "export const GIST_ID = \"%s\";\n" "${{ secrets.GIST_ID }}" > src/secrets.ts
+          printf "export const SECRET_PAT = \"%s\";\n" "${{ secrets.SECRET_PAT }}" >> src/secrets.ts
+          
       - name: Debug secrets file
         shell: bash
         run: |
