@@ -48,8 +48,14 @@ jobs:
           export const GIST_ID = "${{ secrets.GIST_ID }}";
           export const SECRET_PAT = "${{ secrets.SECRET_PAT }}";
           EOF
-
+      - name: Debug secrets file
+        shell: bash
+        run: |
+          echo "--- Contents of src/secrets.ts ---"
+          cat src/secrets.ts
+          echo "------------------------------------"
       # Schritt 4: Das Projekt bauen (TypeScript zu JavaScript kompilieren)
+      
       - name: Build project
         run: npm run build
 
