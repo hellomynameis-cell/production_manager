@@ -1,0 +1,11 @@
+# Ignore Node dependencies
+node_modules/
+
+# Ignore all compiled output from TypeScript
+dist/
+
+# Ignore environment variables file
+.env
+
+# Ignore the source file for secrets
+src/secrets.ts
