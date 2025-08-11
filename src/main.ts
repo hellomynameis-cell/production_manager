@@ -34,7 +34,6 @@ const customerNameInput = document.getElementById('customerName') as HTMLSelectE
 const dateInput = document.getElementById('deliveryDate') as HTMLSelectElement;
 
 const submitOrderButton = document.getElementById('submitOrderButton') as HTMLButtonElement;
-const resetFormButton = document.getElementById('resetFormButton') as HTMLButtonElement; // NEW: Reset button
 const sortOrderSelect = document.getElementById('sortOrder') as HTMLSelectElement;
 
 const ordersContainer = document.getElementById('orders-container') as HTMLElement; // Main order list
