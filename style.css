@@ -1,8 +1,13 @@
+* {
+    border: 1px solid red !important;
+}
+
+
 :root {
     --primary-color: #4CAF50;
     --secondary-color: #007bff;
     --danger-color: #dc3545;
-    --bg-body: #f4f7f6;
+    --bg-body: #f8f9fa;
     --bg-card: #ffffff;
     --bg-alt: #e9ecef;
     --border-color: #dee2e6;
@@ -10,6 +15,9 @@
     --text-light: #6c757d;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.07); /* REDUCED shadow */
 }
+
+
+
 
 /* --- GENERAL LAYOUT & BODY --- */
 body {
@@ -36,19 +44,18 @@ header {
 
 .main-content {
     display: flex;
-    flex-wrap: wrap;
     gap: 20px; /* REDUCED gap between columns */
-    max-width: 1600px;
     margin: 0 auto;
 }
 
 /* --- LEFT COLUMN: Order Forms & List --- */
 .order-list-area {
-    flex: 1 1 320px; /* REDUCED base width */
+    flex: 1 1 auto; /* REDUCED base width */
     display: flex;
     flex-direction: column;
     gap: 15px; /* REDUCED gap */
-    max-width: 300px;
+    max-width: 100%; /* CHANGED: from 300px. Let it be controlled by the parent. */
+    width: 300px;    /* ADDED: Use width for the ideal size, but max-width allows it to shrink. */
 }
 
 /* GOAL: Make "Add new order" section smaller */
@@ -112,7 +119,8 @@ header {
 
 /* --- RIGHT COLUMN: Machines --- */
 .machines-area {
-    flex: 3 1 600px;
+    flex: 1 1 auto;
+    max-width: none !important; /* remove fixed max-width */
 }
 
 #machines-grid {
@@ -121,17 +129,17 @@ header {
     gap: 10px; /* REDUCED Vertical gap between each machine */
 }
 
-.machine-container {
+.machine-container { /* Maschinen Zeile, äußere Einheit */
     display: flex;
     align-items: stretch;
     background-color: var(--bg-card);
-    padding: 0.75rem; /* REDUCED padding */
+    padding: 0.6em; /* REDUCED padding */
     border-radius: 6px;
     box-shadow: var(--shadow);
 }
 
-.machine-container h3 {
-    flex: 0 0 100px; /* REDUCED fixed width for the name */
+.machine-container h3 { /* Bereich mit Maschinen-Titel */
+    flex: 0 1 100px; /* REDUCED fixed width for the name */
     margin: 0;
     font-size: 1em; /* REDUCED font size */
     text-align: right;
@@ -142,16 +150,18 @@ header {
     justify-content: flex-end;
 }
 
-.machine-orders {
+.machine-orders { /* Bereich in dem die Tiles sind (drag/drop) */
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px; /* REDUCED Horizontal gap between orders */
-    min-height: 60px; /* REDUCED min height */
+    gap: 4px; /* REDUCED Horizontal gap between orders */
+    min-height: 106px; /* REDUCED min height */
     border: 1px dashed var(--border-color);
     border-radius: 5px;
-    padding: 8px; /* REDUCED padding */
+    padding: 4px; /* REDUCED padding */
     overflow-x: auto;
+    overflow-y: hidden; /* Hides vertical scrollbar */
+
 }
 
 /* --- SHARED STYLING for .order-item --- */
@@ -164,6 +174,7 @@ header {
     border-radius: 5px;
     background-color: var(--bg-body);
 }
+
 .order-item h4 { font-size: 0.9em; margin: 0; font-weight: 600; }
 .order-item p { font-size: 0.8em; margin: 0; color: var(--text-light); }
 .order-item .order-actions { display: flex; gap: 5px; margin-top: 5px; align-self: flex-end; }
@@ -193,7 +204,6 @@ header {
 
 /* Style orders specifically when inside a machine's horizontal list */
 .machine-orders .order-item {
-    flex-shrink: 0;
     width: 160px; /* REDUCED fixed width */
     background-color: white;
 }
