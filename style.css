@@ -247,15 +247,15 @@ header h2, .machines-area h2 {
 }
 
 .order-item.status-highlight-gruen {
-    border-color: var(--primary-color); /* Green */
+    border-left-color: #2ecc71; /* New, softer green */
 }
 
 .order-item.status-highlight-gelb {
-    border-color: #ffc107; /* Yellow */
+    border-left-color: #f1c40f; /* New, golden yellow */
 }
 
 .order-item.status-highlight-rot {
-    border-color: var(--danger-color); /* Red */
+    border-left-color: #e74c3c; /* New, softer red */
 }
 
 
@@ -285,9 +285,17 @@ header h2, .machines-area h2 {
 }
 
 /* --- Sortable.js Helper Class --- */
-.sortable-ghost {
-    opacity: 0.5;
-    background: #c8ebfb;
+.order-item.sortable-ghost {
+    /* 1. First, we must explicitly turn OFF the gradient from the .order-item style. */
+    background-image: none;
+
+    /* 2. Now, we apply the solid blue color we want. */
+    background-color: #c8ebfb;
+    
+    /* 3. (Optional but recommended) Let's make the ghost even clearer. */
+    opacity: 0.9; /* Make it a bit more solid and visible */
+    border-color: #a1d9f7; /* Use a matching blue for the border */
+    box-shadow: none; /* Turn off the shadow, as it's not needed on the ghost */
 }
 
 /* --- Responsive Media Query --- */
@@ -441,3 +449,26 @@ header h2, .machines-area h2 {
 
 
 
+.form-group {
+    display: flex;
+    align-items: first baseline; /* This is key! It vertically aligns the label text and the input box */
+    gap: 10px;           /* Adds a nice space between the label and the input */
+}
+
+/* 
+   We now tell the label inside the form-group NOT to be a block element,
+   and to take up only the space it needs.
+*/
+.form-group label {
+    display: inline; /* Or 'initial'. This removes the line-breaking behavior. */
+    flex-shrink: 0;  /* Prevents the label from shrinking if the space is tight */
+}
+
+/* 
+   And we tell the input to grow and fill the remaining available space.
+   This is much better than a fixed width.
+*/
+.form-group input {
+    width: 100%10py;       /* Allow the input to take up all remaining space */
+    margin-bottom: 0;  /* The margin is now on the parent .form-group */
+}
