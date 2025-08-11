@@ -5,6 +5,10 @@ declare const Sortable: any;
 
 import { Order, Machine } from './interfaces.js';
 import { initializeManager } from './orderManager.js';
+import { createOrderTile } from './orderTile.js';
+
+
+// Create formatters once for better performance
 
 
 import {
@@ -26,6 +30,9 @@ const orderIdToEditInput = document.getElementById('orderIdToEdit') as HTMLInput
 const productNameInput = document.getElementById('productName') as HTMLInputElement;
 const quantityInput = document.getElementById('quantity') as HTMLInputElement;
 const statusSelect = document.getElementById('status') as HTMLSelectElement;
+const customerNameInput = document.getElementById('customerName') as HTMLSelectElement;
+const dateInput = document.getElementById('deliveryDate') as HTMLSelectElement;
+
 const submitOrderButton = document.getElementById('submitOrderButton') as HTMLButtonElement;
 const resetFormButton = document.getElementById('resetFormButton') as HTMLButtonElement; // NEW: Reset button
 const sortOrderSelect = document.getElementById('sortOrder') as HTMLSelectElement;
@@ -145,23 +152,7 @@ function renderOrders(): void {
 
     // 3. Create and append order elements
     ordersToDisplay.forEach(order => {
-        const orderDiv = document.createElement('div');
-        // ... (The creation of orderDiv.innerHTML is exactly the same as before) ...
-        orderDiv.className = 'order-item';
-        orderDiv.dataset.orderId = order.id.toString();
-        orderDiv.draggable = true;
-        orderDiv.innerHTML = `
-            <h4>Order #${order.id} - ${order.productName}</h4>
-            <p>Quantity: ${order.quantity}</p>
-            <p>Status: <strong class="status-${order.status}">${order.status}</strong></p>
-            <div class="order-actions">
-                <button class="edit-button">Edit</button>
-                <button class="delete-button">Delete Order</button>
-            </div>
-        `;
-
-        orderDiv.querySelector('.edit-button')?.addEventListener('click', () => handleEditClick(order.id));
-        orderDiv.querySelector('.delete-button')?.addEventListener('click', () => handleDeleteClick(order.id));
+        const orderDiv = createOrderTile(order);
 
         // 4. Append to the correct container
         let targetContainer: HTMLElement | null = null;
@@ -175,9 +166,9 @@ function renderOrders(): void {
         if (targetContainer) {
             targetContainer.appendChild(orderDiv);
         } else if (order.location !== 'main-list') {
-            // If the machine doesn't exist anymore, move order to main list
             console.warn(`Container for location "${order.location}" not found. Moving order ID ${order.id} to main list.`);
             order.location = 'main-list';
+            updateOrderLocationAndPosition(order.id, 'main-list', []); // Move it officially
             ordersContainer.appendChild(orderDiv);
         }
     });
@@ -193,39 +184,54 @@ function handleFormSubmit(event: Event): void {
 
     const productName = productNameInput.value.trim();
     const quantity = parseInt(quantityInput.value);
-    const status = statusSelect.value as 'Pending' | 'Shipped' | 'Delivered';
+    const status = statusSelect.value as 'rot' | 'gelb' | 'gruen';
+    const customerName = customerNameInput.value.trim();
+    const deliveryDate = dateInput.value.trim();
 
-    if (!productName || isNaN(quantity) || quantity <= 0) {
-        showToast('Please enter a valid product name and quantity.', 'error');
+    // The validation check is still perfect.
+    if (!productName || !customerName || isNaN(quantity) || quantity <= 0 || !deliveryDate) {
+        showToast('Bitte alle Felder korrekt ausfüllen.', 'error'); // "Please fill out all fields correctly."
         return;
     }
 
     const orderIdToEdit = orderIdToEditInput.value;
-    let message = ''; // Define a variable to hold our success message
-
+    let message = '';
 
     if (orderIdToEdit) {
-        // --- UPDATE MODE ---
+    
         updateOrder({
             id: parseInt(orderIdToEdit),
             productName,
             quantity,
             status,
-            // Location is preserved by orderManager's updateOrder, so no need to pass it here.
-        } as Order); // Cast to Order because the location property will be added by orderManager.
+            customerName,
+            deliveryDate,
+            location: ''
+        });
         
-        message = 'Order updated successfully!'; // Set the update message
+        message = 'Auftrag erfolgreich aktualisiert!'; // "Order updated successfully!"
 
     } else {
         // --- ADD MODE ---
-        addOrder({ productName, quantity, status });
-        message = 'New order added!'; // Set the add message
+        // This is the key change. We now create a complete object that satisfies
+        // the Order interface by providing a default 'location'.
+        addOrder({
+            productName,
+            quantity,
+            status,
+            customerName,
+            deliveryDate,
 
+        });
+        // No 'as Order' cast is needed because the object is now correct.
+        
+        message = 'Neuer Auftrag hinzugefügt!'; // "New order added!"
     }
 
     resetForm();
     renderOrders(); // Re-render the lists to show the changes.
 
+    // Using setTimeout ensures the toast appears after the render completes.
     setTimeout(() => {
         showToast(message, 'success');
     }, 0); 
@@ -234,12 +240,15 @@ function handleFormSubmit(event: Event): void {
 /**
  * Populates the form with an order's data for editing.
  */
-function handleEditClick(orderId: number): void {
+export function handleEditClick(orderId: number): void { // <-- ADD EXPORT
     const orderToEdit = getAllOrders().find(order => order.id === orderId);
     if (orderToEdit) {
+        // ... (rest of the function is the same)
         productNameInput.value = orderToEdit.productName;
         quantityInput.value = orderToEdit.quantity.toString();
         statusSelect.value = orderToEdit.status;
+        customerNameInput.value = orderToEdit.customerName;
+        dateInput.value = orderToEdit.deliveryDate;
         orderIdToEditInput.value = orderToEdit.id.toString();
         submitOrderButton.textContent = 'Update Order';
         addOrderForm.scrollIntoView({ behavior: 'smooth' });
@@ -249,10 +258,11 @@ function handleEditClick(orderId: number): void {
 /**
  * Handles the deletion of an order.
  */
-function handleDeleteClick(orderId: number): void {
-    if (confirm(`Are you sure you want to delete Order #${orderId}?`)) {
+export function handleDeleteClick(orderId: number): void { // <-- ADD EXPORT
+    if (confirm(`Sind Sie sicher, dass Sie Auftrag #${orderId} löschen möchten?`)) { // Adjusted to German
         deleteOrder(orderId);
         renderOrders(); // Re-render to reflect the deletion.
+        showToast('Auftrag gelöscht!', 'success');
     }
 }
 
@@ -273,31 +283,46 @@ function resetForm(): void {
 function handleDragEnd(evt: any): void {
     const draggedItem = evt.item; // The HTML element that was dragged
     const targetList = evt.to;   // The HTML element of the list where it was dropped
+    const sourceList = evt.from; // The list where the item came from
 
-    const draggedOrderId = parseInt(draggedItem.dataset.orderId || '0');
+
+      const draggedOrderId = parseInt(draggedItem.dataset.orderId || '0');
     if (!draggedOrderId) {
-        console.warn("Dragged item missing order ID.");
+        console.error("Dragged item is missing an order ID.");
+        // If the item can't be identified, it's safer to re-render to avoid inconsistency.
+        renderOrders(); 
         return;
     }
 
     const newLocation = getLocationFromContainer(targetList);
     if (!newLocation) {
-        console.warn("Could not determine new location for dropped item.");
+        console.error("Could not determine new location for dropped item.");
+        // Re-render to fix any visual glitch.
+        renderOrders();
         return;
     }
 
     // Get the array of all order IDs in the target list, in their new visual order.
-    // Important: .children gives live HTMLCollection, Array.from converts it.
     const newOrderIdsInList = Array.from(targetList.children)
         .map(item => parseInt((item as HTMLElement).dataset.orderId || '0'))
-        .filter(id => id > 0); // Filter out any potential non-order elements or 0s
+        .filter(id => id > 0);
 
     // Call the order manager to update the data model and persist the changes.
     updateOrderLocationAndPosition(draggedOrderId, newLocation, newOrderIdsInList);
 
     // Re-render the UI to ensure consistency with the updated data model.
     // applySortOnNextRender is already false, preserving manual order.
-    renderOrders();
+    if (sourceList === ordersContainer && sortOrderSelect.value !== 'manual') {
+        applySortOnNextRender = true;
+        // This is a situation where a partial re-render might be needed,
+        // but for now, let's stick to the main fix. The simplest solution
+        // is to just accept the manual order after a drag.
+    }
+    
+    // IMPORTANT: Make sure the main list's sort order is now set to 'manual'
+    // because you have manually changed the order.
+    sortOrderSelect.value = 'manual';
+    applySortOnNextRender = false;
 }
 
 /**
@@ -328,6 +353,14 @@ async function initializeApp(): Promise<void> {
         onEnd: handleDragEnd,
     });
 
+    window.addEventListener('click', () => {
+        // Find all open dropdowns
+        const openDropdowns = document.querySelectorAll('.menu-dropdown.show');
+        // Close each one
+        openDropdowns.forEach(dropdown => {
+            dropdown.classList.remove('show');
+        });
+    });
     // 5. Initial render of orders into the now-ready containers
     renderOrders();
 }

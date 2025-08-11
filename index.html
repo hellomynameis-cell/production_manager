@@ -25,18 +25,21 @@
                     <input type="hidden" id="orderIdToEdit">
                     <label for="productName">Product Name:</label>
                     <input type="text" id="productName" required>
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" min="1" value="1" required>
+                    <label for="quantity">Menge:</label>
+                    <input type="number" id="quantity" min="1" value="1000" required>
+                    <label for="customerName">Kunde:</label>
+                    <input type="text" id="customerName">
+                    <label for="deliveryDate">Liefertermin:</label>
+                    <input type="text" id="deliveryDate" placeholder="KW/JJ" pattern="\d{2}/\d{2}" title="Format: WW/MM" required>
 
             <label for="status">Status:</label>
-            <select id="status" required>
-                <option value="Pending">Pending</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
+            <select id="status" required>  
+                <option value="gruen">grün</option>
+                <option value="gelb">gelb</option>
+                <option value="rot">rot</option>
             </select>
 
             <button type="submit" id="submitOrderButton">Add Order</button>
-            <button type="button" id="resetFormButton">Reset Form</button> <!-- NEW: Reset button -->
 
         </form>
             </div>

@@ -1,6 +1,4 @@
-* {
-    border: 1px solid red !important;
-}
+
 
 
 :root {
@@ -173,34 +171,29 @@ header {
     border: 1px solid var(--border-color);
     border-radius: 5px;
     background-color: var(--bg-body);
+    position: relative;
+    /* Add some padding to prevent content from overlapping the new menu button */
+    padding-right: 40px; 
 }
 
 .order-item h4 { font-size: 0.9em; margin: 0; font-weight: 600; }
 .order-item p { font-size: 0.8em; margin: 0; color: var(--text-light); }
 .order-item .order-actions { display: flex; gap: 5px; margin-top: 5px; align-self: flex-end; }
 
-/* Status badges */
-.order-item strong[class*="status-"] {
-    font-weight: bold;
-    padding: 2px 6px; /* REDUCED padding */
-    font-size: 0.75em; /* REDUCED font size */
-    border-radius: 4px;
-}
-.status-Pending { background-color: #ffc107; color: #333; }
-.status-Shipped { background-color: #17a2b8; color: white; }
-.status-Delivered { background-color: #28a745; color: white; }
+
 
 /* Buttons inside order items */
-.order-item button {
-    padding: 3px 7px; /* REDUCED padding */
+.order-item .order-actions .button {
+    padding: 3px 7px;
     border: none;
     border-radius: 4px;
-    color: white;
+    color: white; /* This color is only for buttons with a colored background */
     cursor: pointer;
-    font-size: 0.8em; /* REDUCED font size */
+    font-size: 0.8em;
 }
-.edit-button { background-color: var(--secondary-color); }
-.delete-button { background-color: var(--danger-color); }
+.order-actions .edit-button { background-color: var(--secondary-color);}
+.order-actions .delete-button { background-color: var(--danger-color); }
+
 
 /* Style orders specifically when inside a machine's horizontal list */
 .machine-orders .order-item {
@@ -281,4 +274,115 @@ header {
     to {
         opacity: 0;
     }
+}
+
+/* 2. Style the menu container */
+.order-menu {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color:black
+}
+
+/* 3. Style the three-dot button */
+.menu-toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem; /* Makes the dots bigger */
+    line-height: 1;
+    padding: 0 2px;
+    color: #555;
+    border-radius: 4px;
+    color: #555555; /* A dark grey color */
+
+}
+
+.menu-toggle-button:hover {
+    color: #000000; /* Black on hover */
+    background-color: #f0f0f0; /* A light grey background */
+}
+
+/* 4. Style the dropdown panel */
+.menu-dropdown {
+    /* Hide by default */
+    display: none; 
+    
+    /* Positioning */
+    position: absolute;
+    right: 0;
+    top: 100%; /* Position it right below the button */
+    z-index: 100;
+
+    /* Appearance */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    min-width: 120px;
+    list-style: none;
+    padding: 5px 0;
+    
+}
+
+/* 5. The class that makes the dropdown visible */
+.menu-dropdown.show {
+    display: block;
+}
+
+/* 6. Style the action buttons inside the dropdown */
+.menu-action-button {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text-dark); /* <--- ADD THIS LINE */
+}
+
+.menu-action-button:hover {
+    background-color: #f5f5f5;
+}
+
+/* Add a specific color for the delete action to make it stand out */
+.menu-action-button.delete-button {
+    color: var(--danger-color); /* Make the text red */
+    font-weight: 500;
+}
+
+
+
+
+.traffic-light {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    
+    /* === THIS IS THE ONLY CHANGE === */
+    margin-left: 8px; /* Changed from margin-right */
+    /* =============================== */
+
+    vertical-align: middle;
+    background-color: #e0e0e0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.status-highlight-gruen .traffic-light {
+    background-color: #28a745;
+    box-shadow: 0 0 6px #28a745;
+}
+
+/* YELLOW light for Pending AND Shipped */
+.status-highlight-gelb .traffic-light {
+    background-color: #ffc107;
+    box-shadow: 0 0 6px #ffc107;
+}
+
+/* RED light for a future "Error" or "Overdue" status */
+.status-highlight-rot .traffic-light {
+    background-color: #dc3545;
+    box-shadow: 0 0 6px #dc3545;
 }
