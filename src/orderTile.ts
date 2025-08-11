@@ -30,7 +30,7 @@ export function createOrderTile(order: Order): HTMLDivElement {
         </div>
 
         <h4>${order.productName}</h4>
-        <p>Kunde: <strong>${order.customerName}</strong></p>
+        <h4>${order.customerName}</h4>
         <p>Menge: <strong>${germanNumberFormatter.format(order.quantity)}</strong></p>
         <p>Termin: <strong>${order.deliveryDate}</strong>
         <span class="traffic-light"></span>

@@ -1,9 +1,7 @@
 
-
-
 :root {
     --primary-color: #4CAF50;
-    --secondary-color: #007bff;
+    --secondary-color: #035dbc;
     --danger-color: #dc3545;
     --bg-body: #f8f9fa;
     --bg-card: #ffffff;
@@ -13,8 +11,6 @@
     --text-light: #6c757d;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.07); /* REDUCED shadow */
 }
-
-
 
 
 /* --- GENERAL LAYOUT & BODY --- */
@@ -35,10 +31,8 @@ header h2, .machines-area h2 {
     font-size: 1.5em; /* REDUCED heading size */
 }
 
-header {
-    text-align: center;
-    margin-bottom: 1.5rem; /* REDUCED margin */
-}
+
+
 
 .main-content {
     display: flex;
@@ -48,22 +42,57 @@ header {
 
 /* --- LEFT COLUMN: Order Forms & List --- */
 .order-list-area {
-    flex: 1 1 auto; /* REDUCED base width */
+    flex: 0 0 300px; 
     display: flex;
     flex-direction: column;
     gap: 15px; /* REDUCED gap */
     max-width: 100%; /* CHANGED: from 300px. Let it be controlled by the parent. */
-    width: 300px;    /* ADDED: Use width for the ideal size, but max-width allows it to shrink. */
+    width: 200px;    /* ADDED: Use width for the ideal size, but max-width allows it to shrink. */
 }
 
 /* GOAL: Make "Add new order" section smaller */
 .add-order-section {
     background-color: var(--bg-card);
-    padding: 1rem; /* REDUCED padding */
-    border-radius: 6px; /* REDUCED border radius */
+    border-radius: 8px; /* Slightly larger radius for a softer look */
     box-shadow: var(--shadow);
+    overflow: hidden; /* This is key for containing the new header's corners */
+    padding: 0; /* We remove padding here to let the header touch the edges */
 }
-.add-order-section h2 { font-size: 1.2em; margin-bottom: 1rem; }
+
+
+.add-order-section h2 {
+    /* Create the header bar */
+    background-image: linear-gradient(to right, #007bff, #0056b3); /* Blue gradient */
+    color: white;
+    
+    /* Spacing and Alignment */
+    padding: 1rem 1.25rem;
+    margin: 0;
+    
+    /* Font Styling */
+    font-size: 1.2em;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+
+/* We need to add padding to the form itself now */
+#add-order-form {
+    padding: 1.25rem;
+}
+
+#add-order-form input:focus,
+#add-order-form select:focus,
+.sort-section select:focus {
+    /* 1. The border color changes to your primary blue */
+    border-color: var(--secondary-color);
+
+    /* 2. A soft "glow" appears around the element, also in blue */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+
+    /* 3. Remove the default, often ugly, browser outline */
+    outline: none;
+}
+
 #add-order-form label { display: block; margin-bottom: 0.25rem; font-weight: 500; font-size: 0.9em; }
 #add-order-form input, #add-order-form select {
     width: 100%;
@@ -83,8 +112,16 @@ header {
     color: white;
     margin-top: 0.25rem;
 }
-#submitOrderButton { background-color: var(--primary-color); }
-#resetFormButton { background-color: var(--text-light); }
+
+#submitOrderButton {
+    background-color: var(--secondary-color); /* Use the primary blue */
+    transition: background-color 0.2s ease;
+}
+
+#submitOrderButton:hover {
+    /* A slightly darker blue on hover */
+    background-color: #0056b3; 
+}
 
 /* Styling for the sort controls section */
 .sort-section {
@@ -105,19 +142,20 @@ header {
 
 /* Styling for the main vertical order list */
 #orders-container {
-    background-color: var(--bg-card);
-    padding: 1rem; /* REDUCED padding */
+    background-color: var(--bg-alt); /* <--- ADD/CHANGE THIS LINE */
+    padding: 1rem;
     border-radius: 6px;
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    gap: 8px; /* REDUCED gap */
+    gap: 8px;
 }
+
 
 
 /* --- RIGHT COLUMN: Machines --- */
 .machines-area {
-    flex: 1 1 auto;
+    flex: 1;
     max-width: none !important; /* remove fixed max-width */
 }
 
@@ -127,54 +165,99 @@ header {
     gap: 10px; /* REDUCED Vertical gap between each machine */
 }
 
-.machine-container { /* Maschinen Zeile, äußere Einheit */
+.machine-container {
     display: flex;
     align-items: stretch;
-    background-color: var(--bg-card);
-    padding: 0.6em; /* REDUCED padding */
-    border-radius: 6px;
+    background-color: var(--bg-card); /* The container is the main white card */
+    border-radius: 8px;
     box-shadow: var(--shadow);
+    overflow: hidden; /* This is no longer strictly necessary but is good practice */
 }
 
-.machine-container h3 { /* Bereich mit Maschinen-Titel */
-    flex: 0 1 100px; /* REDUCED fixed width for the name */
+.machine-container h3 {
+    /* --- The new "Subtle Panel" style --- */
+    background-color: var(--bg-alt); /* Use the light alternate background color */
+    color: var(--text-dark);          /* Use the standard dark text for a clean look */
+    border-right: 1px solid var(--border-color); /* A clean separator line */
+
+    /* --- Layout and Sizing --- */
+    flex: 0 0 120px; /* A nice, defined width for the panel */
     margin: 0;
-    font-size: 1em; /* REDUCED font size */
-    text-align: right;
-    padding-right: 10px; /* REDUCED padding */
-    border-right: 1px solid var(--bg-alt);
+    padding: 0 1rem;
+    
+    /* --- Text and Alignment --- */
+    font-size: 1em;
+    font-weight: 600;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
-.machine-orders { /* Bereich in dem die Tiles sind (drag/drop) */
+.machine-orders {
+    background-color: transparent;
+    border: none; /* The outer container now has the border */
+    /* Keep all other flex properties */
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 4px; /* REDUCED Horizontal gap between orders */
-    min-height: 106px; /* REDUCED min height */
-    border: 1px dashed var(--border-color);
-    border-radius: 5px;
-    padding: 4px; /* REDUCED padding */
+    gap: 4px;
+    min-height: 106px;
+    padding: 8px; /* A little padding inside the drop zone */
     overflow-x: auto;
-    overflow-y: hidden; /* Hides vertical scrollbar */
-
+    overflow-y: hidden;
 }
 
 /* --- SHARED STYLING for .order-item --- */
 .order-item {
     display: flex;
     flex-direction: column;
-    gap: 4px; /* REDUCED gap */
-    padding: 0.5rem; /* REDUCED padding */
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background-color: var(--bg-body);
+    gap: 4px;
+    padding: 0.75rem;
+    border-radius: 6px;
     position: relative;
-    /* Add some padding to prevent content from overlapping the new menu button */
-    padding-right: 40px; 
+    
+    /* === THE KEY ENHANCEMENTS START HERE === */
+
+    /* 1. A more noticeable gradient for better definition */
+    background-image: linear-gradient(to bottom, #ffffff, #e9ecef); /* Ends with your --bg-alt color */
+
+    /* 2. A crisp border that defines the tile's edges */
+    border: 1px solid #dee2e6; /* Your --border-color */
+
+    /* 3. A stronger, more effective shadow to create depth and contrast */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    /* --- Animations and Cursor remain the same --- */
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+    will-change: transform, box-shadow;
+    cursor: grab;
+    
+    /* --- The colored left border remains a great feature --- */
+    border-left-width: 5px; 
+
 }
+
+.order-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.order-item:active {
+    cursor: grabbing;
+}
+
+.order-item.status-highlight-gruen {
+    border-color: var(--primary-color); /* Green */
+}
+
+.order-item.status-highlight-gelb {
+    border-color: #ffc107; /* Yellow */
+}
+
+.order-item.status-highlight-rot {
+    border-color: var(--danger-color); /* Red */
+}
+
 
 .order-item h4 { font-size: 0.9em; margin: 0; font-weight: 600; }
 .order-item p { font-size: 0.8em; margin: 0; color: var(--text-light); }
@@ -355,34 +438,6 @@ header {
 
 
 
-.traffic-light {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    
-    /* === THIS IS THE ONLY CHANGE === */
-    margin-left: 8px; /* Changed from margin-right */
-    /* =============================== */
 
-    vertical-align: middle;
-    background-color: #e0e0e0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
 
-.status-highlight-gruen .traffic-light {
-    background-color: #28a745;
-    box-shadow: 0 0 6px #28a745;
-}
 
-/* YELLOW light for Pending AND Shipped */
-.status-highlight-gelb .traffic-light {
-    background-color: #ffc107;
-    box-shadow: 0 0 6px #ffc107;
-}
-
-/* RED light for a future "Error" or "Overdue" status */
-.status-highlight-rot .traffic-light {
-    background-color: #dc3545;
-    box-shadow: 0 0 6px #dc3545;
-}
