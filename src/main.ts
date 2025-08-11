@@ -340,7 +340,6 @@ async function initializeApp(): Promise<void> {
 
     // 3. Attach event listeners
     addOrderForm.addEventListener('submit', handleFormSubmit);
-    resetFormButton.addEventListener('click', resetForm);
     sortOrderSelect.addEventListener('change', () => {
         applySortOnNextRender = true;
         renderOrders();
