@@ -11,7 +11,7 @@ export async function initializeManager(): Promise<void> {
     // Load the state from our Gist instead of localStorage
     orders = await loadState();
 
-    // We keep your excellent data sanitization logic! This is very important.
+    // We keep your excellent data sanitization logic! This is very importants.
     orders.forEach(order => {
         order.id = parseInt(order.id as any);
         order.quantity = parseInt(order.quantity as any);
