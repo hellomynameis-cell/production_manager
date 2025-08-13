@@ -2,7 +2,7 @@
  * A generic API handler that saves (POST) and loads (GET) the entire order state.
  */
 export async function onRequest(context) {
-  // context contains information about the request, including the KV binding.
+  // context contains information about the request, including the KV bindings.
   const { request, env } = context;
 
   // The key we will use to store our data in KV.
