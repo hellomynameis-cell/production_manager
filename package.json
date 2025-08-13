@@ -4,7 +4,10 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "build": "tsc"
+  "clean": "rm -rf dist",
+  "build:ts": "tsc",
+  "build:copy-static": "cp index.html style.css machines.json dist/",
+  "build": "npm run clean && npm run build:ts && npm run build:copy-static"
   },
   "repository": {
     "type": "git",
@@ -23,3 +26,5 @@
     "typescript": "^5.9.2"
   }
 }
+
+
