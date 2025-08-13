@@ -11,7 +11,7 @@ export async function onRequest(context) {
   // Handle a GET request (Load State)
   if (request.method === "GET") {
     try {
-      const savedState = await env.ORDERS_KV.get(KV_KEY);
+      const savedState = await env.orders_kv.get(KV_KEY);
       
       // If no state is found, return a default empty array.
       const data = savedState ? JSON.parse(savedState) : [];
@@ -29,7 +29,7 @@ export async function onRequest(context) {
     try {
       const newState = await request.text();
       // Write the new state (as a string) to our KV namespace.
-      await env.ORDERS_KV.put(KV_KEY, newState);
+      await env.orders_kv.put(KV_KEY, newState);
       
       return new Response('State saved successfully.', { status: 200 });
     } catch (error) {
