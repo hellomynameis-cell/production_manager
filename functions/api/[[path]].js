@@ -1,8 +1,7 @@
-/**
- * A generic API handler that saves (POST) and loads (GET) the entire order state.
- */
+// In /functions/api/[[path]].js
+
 export async function onRequest(context) {
-  // context contains information about the request, including the KV bindings.
+  // context contains information about the request, including the KV binding.
   const { request, env } = context;
 
   // The key we will use to store our data in KV.
@@ -11,9 +10,9 @@ export async function onRequest(context) {
   // Handle a GET request (Load State)
   if (request.method === "GET") {
     try {
-      const savedState = await env.orders_kv.get(KV_KEY);
+      // Ensure we are using the correct, uppercase variable name.
+      const savedState = await env.ORDERS_KV.get(KV_KEY);
       
-      // If no state is found, return a default empty array.
       const data = savedState ? JSON.parse(savedState) : [];
       
       return new Response(JSON.stringify(data), {
@@ -28,8 +27,8 @@ export async function onRequest(context) {
   if (request.method === "POST") {
     try {
       const newState = await request.text();
-      // Write the new state (as a string) to our KV namespace.
-      await env.orders_kv.put(KV_KEY, newState);
+      // Ensure we are using the correct, uppercase variable name here as well.
+      await env.ORDERS_KV.put(KV_KEY, newState);
       
       return new Response('State saved successfully.', { status: 200 });
     } catch (error) {
